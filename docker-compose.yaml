@@ -1,0 +1,23 @@
+volumes:
+  postgresdb_volume:
+
+services:
+  app:
+    build: .
+    environment:
+      - POSTGRES_ADDR=postgresdb
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=marketplace
+    ports: 
+      - 8000:8000
+  
+  postgresdb:
+    image: postgres:18
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=marketplace
+    volumes:
+      - postgresdb_volume:/var/lib/pgsql/data
