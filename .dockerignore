@@ -1,9 +1,15 @@
 /__pycache__/
+
+uv.lock
 .venv/
+.env
+
 .git/
+.gitignore
+
 .dockerignore
 docker-compose.yaml
 Dockerfile
-.gitignore
+
 .vscode/
 .idea/

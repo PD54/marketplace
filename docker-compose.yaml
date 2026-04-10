@@ -7,17 +7,17 @@ services:
     environment:
       - POSTGRES_ADDR=postgresdb
       - POSTGRES_PORT=5432
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=$ENV_POSTGRES_USER
+      - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
       - POSTGRES_DB=marketplace
     ports: 
       - 8000:8000
   
   postgresdb:
-    image: postgres:18
+    image: postgres:18-alpine
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
+      - POSTGRES_USER=$ENV_POSTGRES_USER
       - POSTGRES_DB=marketplace
     volumes:
       - postgresdb_volume:/var/lib/pgsql/data
