@@ -5,19 +5,32 @@ services:
   app:
     build: .
     environment:
-      - POSTGRES_ADDR=postgresdb
-      - POSTGRES_PORT=5432
+      - POSTGRES_ADDR=$ENV_POSTGRES_ADDR
+      - POSTGRES_PORT=$ENV_POSTGRES_PORT
       - POSTGRES_USER=$ENV_POSTGRES_USER
       - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
-      - POSTGRES_DB=marketplace
+      - POSTGRES_DB=$ENV_POSTGRES_DB
     ports: 
       - 8000:8000
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+        restart: true
+
   
   postgresdb:
     image: postgres:18-alpine
     environment:
-      - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
+      - POSTGRES_ADDR=$ENV_POSTGRES_ADDR
+      - POSTGRES_PORT=$ENV_POSTGRES_PORT
       - POSTGRES_USER=$ENV_POSTGRES_USER
-      - POSTGRES_DB=marketplace
+      - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
+      - POSTGRES_DB=$ENV_POSTGRES_DB
     volumes:
       - postgresdb_volume:/var/lib/pgsql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
