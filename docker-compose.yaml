@@ -5,11 +5,12 @@ services:
   app:
     build: .
     environment:
-      - POSTGRES_ADDR=$ENV_POSTGRES_ADDR
-      - POSTGRES_PORT=$ENV_POSTGRES_PORT
-      - POSTGRES_USER=$ENV_POSTGRES_USER
-      - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
-      - POSTGRES_DB=$ENV_POSTGRES_DB
+      - POSTGRES_ADDR=$POSTGRES_ADDR
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+      - DB_ECHO=$DB_ECHO
     ports: 
       - 8000:8000
     depends_on:
@@ -21,15 +22,15 @@ services:
   postgresdb:
     image: postgres:18-alpine
     environment:
-      - POSTGRES_ADDR=$ENV_POSTGRES_ADDR
-      - POSTGRES_PORT=$ENV_POSTGRES_PORT
-      - POSTGRES_USER=$ENV_POSTGRES_USER
-      - POSTGRES_PASSWORD=$ENV_POSTGRES_PASSWORD
-      - POSTGRES_DB=$ENV_POSTGRES_DB
+      - POSTGRES_ADDR=$POSTGRES_ADDR
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
     volumes:
-      - postgresdb_volume:/var/lib/pgsql/data
+      - postgresdb_volume:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       retries: 5
       start_period: 30s
