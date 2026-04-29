@@ -1,13 +1,18 @@
+from decimal import Decimal
+
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Numeric
 
 from app.models.base import Base
+
 
 class Sku(Base):
     __tablename__ = "sku"
 
-    base_price: Mapped[float] = mapped_column(
+    base_price: Mapped[Decimal] = mapped_column(
+        Numeric(precision=12, scale=2),
         nullable=False,
-        default=0.00,
+        default=Decimal("0.00"),
         server_default="0.00"
     )
 

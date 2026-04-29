@@ -4,10 +4,9 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
 from alembic import context
 
-from app.database.config import POSTGRES_URL
+from config.database import POSTGRES_URL
 from app.models.base import Base
 
 # this is the Alembic Config object, which provides
@@ -19,7 +18,10 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", POSTGRES_URL)
+config.set_main_option(
+    "sqlalchemy.url",
+    POSTGRES_URL.render_as_string(hide_password=False)
+)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
