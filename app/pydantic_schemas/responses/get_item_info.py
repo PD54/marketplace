@@ -17,8 +17,7 @@ class GetItemInfoResponse(BaseModel):
     )
     stock: Stock = Field(
         description=(
-            "Stock status of the product: "
-            "'valid' | 'defect' | 'not_found'"
+            "Stock status of the product."
         )
     )
     reserved_state: bool = Field(
