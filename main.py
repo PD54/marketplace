@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.controllers import sku_controller
 
-
-@app.get('/')
-def home() -> str:
-    return "This is the homepage."
+app = FastAPI(title="Marketplace API")
+app.include_router(sku_controller.router)

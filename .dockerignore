@@ -1,7 +1,15 @@
-/__pycache__/
+**/__pycache__/
+*.pyc
+
+.mypy_cache/
+.pytest_cache/
+
+tests/
 
 .venv/
 .env
+
+.pre-commit-config.yaml
 
 .git/
 .gitignore
