@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models.stock_enum import Stock
+from app.models.stock_enum import ProductStock
 
 
 class GetItemInfoResponse(BaseModel):
@@ -15,7 +15,7 @@ class GetItemInfoResponse(BaseModel):
             "(foreign key)"
         )
     )
-    stock: Stock = Field(
+    stock: ProductStock = Field(
         description=(
             "Stock status of the product."
         )

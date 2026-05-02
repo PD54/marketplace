@@ -3,10 +3,10 @@ from decimal import Decimal
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Numeric
 
-from app.models.base import Base
+from app.models.base import BaseORM
 
 
-class Sku(Base):
+class SkuORM(BaseORM):
     __tablename__ = "sku"
 
     base_price: Mapped[Decimal] = mapped_column(

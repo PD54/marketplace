@@ -1,3 +1,3 @@
-from app.models.base import Base
-from app.models.product import Product
-from app.models.sku import Sku
+from app.models.base import BaseORM
+from app.models.product import ProductORM
+from app.models.sku import SkuORM

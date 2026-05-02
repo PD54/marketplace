@@ -54,6 +54,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint('id')
     )
+
     op.create_table(
         'products',
         sa.Column(
@@ -99,6 +100,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint('id')
     )
+
     op.create_index(
         op.f('ix_products_sku_id'),
         'products',

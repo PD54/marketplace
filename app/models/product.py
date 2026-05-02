@@ -3,10 +3,10 @@ import uuid
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import ForeignKey
 
-from app.models.base import Base
+from app.models.base import BaseORM
 
 
-class Product(Base):
+class ProductORM(BaseORM):
     __tablename__ = "products"
 
     sku_id: Mapped[uuid.UUID] = mapped_column(
