@@ -1,13 +1,20 @@
-/__pycache__/
+**/__pycache__/
+*.pyc
+
+.mypy_cache/
+.pytest_cache/
 
 .venv/
 .env
+
+.pre-commit-config.yaml
 
 .git/
 .gitignore
 
 .dockerignore
 docker-compose.yaml
+docker-compose.dev.yaml
 Dockerfile
 
 .vscode/

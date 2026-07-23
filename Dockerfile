@@ -2,10 +2,9 @@ FROM python:3.14
 
 WORKDIR /usr/src/app/
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+COPY --from=ghcr.io/astral-sh/uv:0.11.7 /uv /uvx /bin/
 
-ENV UV_PROJECT_ENVIRONMENT="/usr/local/" \
-    PATH="/root/.local/bin:$PATH"
+ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
 
 COPY pyproject.toml uv.lock .
 
@@ -15,4 +14,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["./entrypoint.sh"]
