@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.database.dto.product import ProductStock
 
 
-class GetItemInfoResponse(BaseModel):
+class GetItemInfoOutputDTO(BaseModel):
     id: UUID = Field(
         description="UUIDv7 of the product"
     )

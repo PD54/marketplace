@@ -3,7 +3,7 @@ from uuid import uuid7
 from httpx import AsyncClient
 
 from app.database.dto.product import ProductDTO
-from app.services.product.dto.get_item_info import GetItemInfoResponse
+from app.services.product.dto.get_item_info import GetItemInfoOutputDTO
 
 
 async def test_get_item_info_success(
@@ -15,8 +15,8 @@ async def test_get_item_info_success(
     assert response.status_code == 200
 
     data = response.json()
-    actual = GetItemInfoResponse.model_validate(data)
-    expected = GetItemInfoResponse.model_validate(product_in_db)
+    actual = GetItemInfoOutputDTO.model_validate(data)
+    expected = GetItemInfoOutputDTO.model_validate(product_in_db)
     assert actual == expected
 
 

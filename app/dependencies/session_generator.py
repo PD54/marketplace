@@ -6,5 +6,5 @@ from app.database.connection import async_session
 
 
 async def get_db() -> AsyncIterator[AsyncSession]:
-    async with async_session() as session:
+    async with async_session.begin() as session:
         yield session
