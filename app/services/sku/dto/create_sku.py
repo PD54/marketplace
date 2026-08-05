@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class CreateSkuInputDTO(BaseModel):
     id: UUID = Field(
-        description="UUIDv7 of the sku"
+        description="Id of the sku"
     )
     base_price: Decimal = Field(
         ge=Decimal("0.00"),
@@ -21,7 +21,7 @@ class CreateSkuInputDTO(BaseModel):
 
 class CreateSkuOutputDTO(BaseModel):
     id: UUID = Field(
-        description="UUIDv7 of the sku"
+        description="Id of the sku"
     )
     base_price: Decimal = Field(
         description="Base price of the SKU"
