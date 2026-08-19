@@ -1,4 +1,4 @@
-from collections.abc import Callable, Awaitable
+from collections.abc import Awaitable, Callable
 from uuid import uuid7
 
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -12,7 +12,7 @@ class RequestIdMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self,
         request: Request,
-        call_next: Callable[[Request], Awaitable[Response]]
+        call_next: Callable[[Request], Awaitable[Response]],
     ) -> Response:
         REQUEST_ID.set(str(uuid7()))
         response = await call_next(request)

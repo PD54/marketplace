@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.dto.base import BaseDTO
 from app.database.orm_models.base import BaseORM
@@ -19,7 +19,7 @@ class BaseRepository[DTO: BaseDTO, ORMModel: BaseORM]:
         if not res:
             return None
         return self.dto.model_validate(res)
-    
+
     async def create(self, data: DTO) -> DTO:
         result = await self.database.scalars(
             insert(self.orm_model)

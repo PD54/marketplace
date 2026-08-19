@@ -1,15 +1,15 @@
 from collections.abc import AsyncIterator, Iterator
 
 import pytest
+from alembic import command
+from alembic.config import Config
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
-    create_async_engine
+    create_async_engine,
 )
-from alembic import command
-from alembic.config import Config
 
 from app.config.database_settings import database_settings
 from app.database.orm_models.base import BaseORM
@@ -20,11 +20,11 @@ async def setup_test_database() -> AsyncIterator[None]:
     test_db_name = database_settings.db_name
     root_url = database_settings.database_url.replace(
         test_db_name,
-        "postgres"
+        "postgres",
     )
     root_engine = create_async_engine(
         root_url,
-        isolation_level="AUTOCOMMIT"
+        isolation_level="AUTOCOMMIT",
     )
 
     async with root_engine.connect() as connection:
@@ -38,12 +38,12 @@ async def setup_test_database() -> AsyncIterator[None]:
 
     root_engine = create_async_engine(
         root_url,
-        isolation_level="AUTOCOMMIT"
+        isolation_level="AUTOCOMMIT",
     )
 
     async with root_engine.connect() as connection:
         await connection.execute(
-            text(f"DROP DATABASE IF EXISTS {test_db_name} WITH (FORCE)")
+            text(f"DROP DATABASE IF EXISTS {test_db_name} WITH (FORCE)"),
         )
     await root_engine.dispose()
 
@@ -64,7 +64,7 @@ async def test_engine() -> AsyncIterator[AsyncEngine]:
         url=database_settings.database_url,
         echo=database_settings.db_echo,
         poolclass=database_settings.pool_class,
-        isolation_level="AUTOCOMMIT"
+        isolation_level="AUTOCOMMIT",
     )
 
     yield engine
@@ -75,13 +75,11 @@ async def test_engine() -> AsyncIterator[AsyncEngine]:
 @pytest.fixture
 async def db_cleanup(
     test_engine: AsyncEngine,
-    run_migrations: None
+    run_migrations: None,
 ) -> AsyncIterator[None]:
     yield
 
-    tables = [
-        table.name for table in reversed(BaseORM.metadata.sorted_tables)
-    ]
+    tables = [table.name for table in reversed(BaseORM.metadata.sorted_tables)]
 
     async with test_engine.connect() as connection:
         for table in tables:
@@ -91,7 +89,7 @@ async def db_cleanup(
 @pytest.fixture
 async def db_session(
     test_engine: AsyncEngine,
-    db_cleanup: None
+    db_cleanup: None,
 ) -> AsyncIterator[AsyncSession]:
     test_async_session = async_sessionmaker(test_engine)
 

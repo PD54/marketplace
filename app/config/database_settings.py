@@ -1,9 +1,9 @@
 import os
 import sys
 
+from pydantic_settings import BaseSettings
 from sqlalchemy import URL
 from sqlalchemy.pool import NullPool
-from pydantic_settings import BaseSettings
 
 
 class DatabaseSettings(BaseSettings):
@@ -17,7 +17,7 @@ class DatabaseSettings(BaseSettings):
     @property
     def is_test_mode(self) -> bool:
         return "pytest" in sys.argv[0] or "PYTEST_XDIST_WORKER" in os.environ
-    
+
     @property
     def db_name(self) -> str:
         if not self.is_test_mode:
@@ -34,8 +34,8 @@ class DatabaseSettings(BaseSettings):
             password=self.postgres_password,
             host=self.postgres_addr,
             port=self.postgres_port,
-            database=self.db_name
-        ).render_as_string(hide_password=False) 
+            database=self.db_name,
+        ).render_as_string(hide_password=False)
 
     @property
     def pool_class(self) -> type[NullPool] | None:

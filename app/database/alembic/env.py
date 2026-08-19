@@ -1,10 +1,10 @@
 import asyncio
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-from alembic import context
 
 from app.config.database_settings import database_settings
 from app.database.orm_models.base import BaseORM
@@ -18,10 +18,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option(
-    "sqlalchemy.url",
-    database_settings.database_url
-)
+config.set_main_option("sqlalchemy.url", database_settings.database_url)
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
@@ -62,7 +59,7 @@ def do_run_migrations(connection: Connection) -> None:
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
-        compare_server_default=True
+        compare_server_default=True,
     )
 
     with context.begin_transaction():

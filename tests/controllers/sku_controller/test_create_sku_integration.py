@@ -4,20 +4,20 @@ from app.database.dto.sku import SkuDTO
 from app.database.repositories.sku import SkuRepository
 from app.services.sku.dto.create_sku import (
     CreateSkuInputDTO,
-    CreateSkuOutputDTO
+    CreateSkuOutputDTO,
 )
 
 
 async def test_create_sku_success(
     client: AsyncClient,
     sku_dto: SkuDTO,
-    sku_repository: SkuRepository
+    sku_repository: SkuRepository,
 ):
     sku_to_create = CreateSkuInputDTO.model_validate(sku_dto)
     request_data = sku_to_create.model_dump(mode="json")
     response = await client.post(
         url="/createSku",
-        json=request_data
+        json=request_data,
     )
 
     assert response.status_code == 200
@@ -38,14 +38,14 @@ async def test_create_sku_success(
 
 async def test_create_sku_already_exists(
     client: AsyncClient,
-    sku_in_db: SkuDTO
+    sku_in_db: SkuDTO,
 ):
     existing_in_db_sku = CreateSkuInputDTO.model_validate(sku_in_db)
     request_data = existing_in_db_sku.model_dump(mode="json")
 
     response = await client.post(
         url="/createSku",
-        json=request_data
+        json=request_data,
     )
 
     assert response.status_code == 400

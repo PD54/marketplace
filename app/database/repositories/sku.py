@@ -1,8 +1,8 @@
 from sqlalchemy.dialects.postgresql import insert
 
-from app.database.repositories.base import BaseRepository
 from app.database.dto.sku import SkuDTO
 from app.database.orm_models.sku import SkuORM
+from app.database.repositories.base import BaseRepository
 
 
 class SkuRepository(BaseRepository[SkuDTO, SkuORM]):

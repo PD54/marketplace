@@ -14,11 +14,11 @@ class GetItemInfoService:
     def __init__(
         self,
         good_repo: GoodRepository,
-        sku_repo: SkuRepository
+        sku_repo: SkuRepository,
     ):
         self.good_repo = good_repo
         self.sku_repo = sku_repo
-    
+
     async def get_item_info(self, good_id: UUID) -> GetItemInfoOutputDTO:
         logger.info(f"Поиск товара с id {good_id}")
         good = await self.good_repo.get_by_id(entity_id=good_id)
@@ -32,5 +32,5 @@ class GetItemInfoService:
             logger.error(f"Не найдена SKU с id {good.sku_id}")
             raise SkuNotFoundError()
 
-        logger.info(f"Успешно найдены товар и его SKU")
+        logger.info("Успешно найдены товар и его SKU")
         return GetItemInfoOutputDTO.model_validate(good)

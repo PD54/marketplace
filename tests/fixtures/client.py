@@ -1,7 +1,7 @@
 from collections.abc import AsyncIterator
 
 import pytest
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 
 from main import app
 
@@ -11,6 +11,6 @@ async def client(db_cleanup: None) -> AsyncIterator[AsyncClient]:
     transport = ASGITransport(app=app)
     async with AsyncClient(
         transport=transport,
-        base_url="http://test"
+        base_url="http://test",
     ) as client:
         yield client

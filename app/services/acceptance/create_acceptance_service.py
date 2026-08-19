@@ -1,6 +1,5 @@
-from decimal import Decimal
-
 import logging
+from decimal import Decimal
 
 from app.database.dto.acceptance import AcceptanceDTO
 from app.database.dto.sku import SkuDTO
@@ -10,8 +9,8 @@ from app.database.repositories.sku import SkuRepository
 from app.database.repositories.task import TaskRepository
 from app.services.acceptance.dto.create_acceptance import (
     CreateAcceptanceInputDTO,
+    CreateAcceptanceItemInputDTO,
     CreateAcceptanceOutputDTO,
-    CreateAcceptanceItemInputDTO
 )
 
 logger = logging.getLogger(__name__)
@@ -30,7 +29,7 @@ class CreateAcceptanceService:
 
     async def create_acceptance(
         self,
-        input_dto: CreateAcceptanceInputDTO
+        input_dto: CreateAcceptanceInputDTO,
     ) -> CreateAcceptanceOutputDTO:
         items_sorted_by_id = sorted(
             input_dto.items_to_accept,
@@ -50,7 +49,7 @@ class CreateAcceptanceService:
     async def process_item(
         self,
         item: CreateAcceptanceItemInputDTO,
-        acceptance: AcceptanceDTO
+        acceptance: AcceptanceDTO,
     ) -> TaskDTO:
         logger.info(f"Обработка SKU с id {item.sku_id}")
         sku_to_create = SkuDTO(
@@ -70,7 +69,7 @@ class CreateAcceptanceService:
                 acceptance_id=acceptance.id,
                 sku_id=item.sku_id,
                 stock=item.stock,
-                count=item.count
+                count=item.count,
             )
         )
         return task

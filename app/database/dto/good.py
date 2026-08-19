@@ -1,6 +1,6 @@
-from uuid import UUID
 from enum import StrEnum
 from typing import Literal
+from uuid import UUID
 
 from pydantic import Field
 
@@ -13,24 +13,18 @@ class GoodStock(StrEnum):
     not_found = "not_found"
 
 
-GoodStockWithoutNotFound = Literal[
-    GoodStock.valid,
-    GoodStock.defect
-]
+GoodStockWithoutNotFound = Literal[GoodStock.valid, GoodStock.defect]
 
 
 class GoodDTO(BaseDTO):
     sku_id: UUID = Field(
-        description=(
-            "Id of the SKU that the good belongs to "
-            "(foreign key)"
-        )
+        description="Id of the SKU that the good belongs to (foreign key)",
     )
     stock: GoodStock = Field(
         GoodStock.valid,
-        description="Stock status of the good."
+        description="Stock status of the good.",
     )
     reserved_state: bool = Field(
         False,
-        description="Flag that tells if the good is reserved"
+        description="Flag that tells if the good is reserved",
     )
