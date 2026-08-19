@@ -10,12 +10,10 @@ class SkuORM(BaseORM):
     __tablename__ = "sku"
 
     base_price: Mapped[Decimal] = mapped_column(
-        Numeric(precision=12, scale=2),
-        nullable=False
+        Numeric(precision=12, scale=2)
     )
 
     is_hidden: Mapped[bool] = mapped_column(
-        nullable=False,
         default=False,
         server_default="f"
     )

@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class BaseDTO(BaseModel):
     id: UUID = Field(
         default_factory=uuid7,
-        description="UUIDv7 of the entity"
+        description="Id of the entity"
     )
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),

@@ -28,3 +28,4 @@ asyncio_mode = "auto"
 
 [tool.mypy]
 exclude = [".venv", "tests"]
+plugins = ["pydantic.mypy"]
