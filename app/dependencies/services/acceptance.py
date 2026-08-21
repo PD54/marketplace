@@ -11,6 +11,9 @@ from app.dependencies.repositories import (
 from app.services.acceptance.create_acceptance_service import (
     CreateAcceptanceService,
 )
+from app.services.acceptance.get_acceptance_info_service import (
+    GetAcceptanceInfoService,
+)
 
 
 def get_create_acceptance_service(
@@ -23,5 +26,17 @@ def get_create_acceptance_service(
     return CreateAcceptanceService(
         acceptance_repo=acceptance_repo,
         sku_repo=sku_repo,
+        task_repo=task_repo,
+    )
+
+
+def get_get_acceptance_info_service(
+    acceptance_repo: AcceptanceRepository = Depends(
+        get_acceptance_repository,
+    ),
+    task_repo: TaskRepository = Depends(get_task_repository),
+) -> GetAcceptanceInfoService:
+    return GetAcceptanceInfoService(
+        acceptance_repo=acceptance_repo,
         task_repo=task_repo,
     )
