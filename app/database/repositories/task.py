@@ -13,10 +13,11 @@ class TaskRepository(BaseRepository[TaskDTO, TaskORM]):
 
     async def get_by_acceptance_id(
         self,
-        acceptance_id: UUID
+        acceptance_id: UUID,
     ) -> list[TaskDTO]:
         result = await self.database.scalars(
-            select(self.orm_model)
-            .where(self.orm_model.acceptance_id == acceptance_id)
+            select(self.orm_model).where(
+                self.orm_model.acceptance_id == acceptance_id
+            )
         )
         return [self.dto.model_validate(task) for task in result]

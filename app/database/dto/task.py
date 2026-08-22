@@ -1,5 +1,5 @@
-from uuid import UUID
 from enum import StrEnum
+from uuid import UUID
 
 from pydantic import Field
 
@@ -21,27 +21,27 @@ class TaskType(StrEnum):
 class TaskDTO(BaseDTO):
     status: TaskStatus = Field(
         TaskStatus.in_work,
-        description="Status of the task"
+        description="Status of the task",
     )
     task_type: TaskType = Field(description="Type of the task")
     posting_id: UUID | None = Field(
         None,
-        description="Id of the posting that the task is assigned to"
+        description="Id of the posting that the task is assigned to",
     )
     acceptance_id: UUID | None = Field(
         None,
-        description="Id of the acceptance that the task is assigned to"
+        description="Id of the acceptance that the task is assigned to",
     )
     good_id: UUID | None = Field(
         None,
-        description="Id of the good which is the target of the task"
+        description="Id of the good which is the target of the task",
     )
     sku_id: UUID = Field(
-        description="Id of the sku which is the target of the task"
+        description="Id of the sku which is the target of the task",
     )
     stock: GoodStockWithoutNotFound = Field(
-        description="Stock status of target entity(ies) of the task"
+        description="Stock status of target entity(ies) of the task",
     )
     count: int = Field(
-        description="Number of target entity(ies) of the task"
+        description="Number of target entity(ies) of the task",
     )

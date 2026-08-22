@@ -21,6 +21,7 @@ dependencies = [
     "pydantic-settings==2.14.2",
     "httpx==0.28.1",
     "greenlet==3.4.0",
+    "ruff==0.16.3",
 ]
 
 [tool.pytest.ini_options]
@@ -29,3 +30,32 @@ asyncio_mode = "auto"
 [tool.mypy]
 exclude = [".venv", "tests"]
 plugins = ["pydantic.mypy"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 79
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "I",
+    "F",
+    "E",
+    "W",
+    "UP",
+    "ASYNC"
+]
+ignore = [
+    "B904",
+]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.params.Depends",
+    "fastapi.Query",
+    "fastapi.params.Query"
+]
+
+[tool.ruff.lint.pep8-naming]
+classmethod-decorators = ["pydantic.field_validator"]

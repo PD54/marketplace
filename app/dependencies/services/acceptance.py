@@ -6,16 +6,16 @@ from app.database.repositories.task import TaskRepository
 from app.dependencies.repositories import (
     get_acceptance_repository,
     get_sku_repository,
-    get_task_repository
+    get_task_repository,
 )
 from app.services.acceptance.create_acceptance_service import (
-    CreateAcceptanceService
+    CreateAcceptanceService,
 )
 
 
 def get_create_acceptance_service(
     acceptance_repo: AcceptanceRepository = Depends(
-        get_acceptance_repository
+        get_acceptance_repository,
     ),
     sku_repo: SkuRepository = Depends(get_sku_repository),
     task_repo: TaskRepository = Depends(get_task_repository),

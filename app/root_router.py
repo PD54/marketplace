@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.controllers.sku_controller import router as sku_router
 from app.controllers.acceptance_controller import router as acceptance_router
+from app.controllers.sku_controller import router as sku_router
 
 all_routers = [
     sku_router,

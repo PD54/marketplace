@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.orm_models.base import BaseORM
 
@@ -11,13 +11,13 @@ class GoodORM(BaseORM):
 
     sku_id: Mapped[UUID] = mapped_column(
         ForeignKey("sku.id", ondelete="CASCADE", onupdate="CASCADE"),
-        index=True
+        index=True,
     )
     stock: Mapped[str] = mapped_column(
         default="valid",
-        server_default="valid"
+        server_default="valid",
     )
     reserved_state: Mapped[bool] = mapped_column(
         default=False,
-        server_default="f"
+        server_default="f",
     )

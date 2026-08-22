@@ -1,9 +1,26 @@
 repos:
   - repo: local
     hooks:
+      - id: ruff-format
+        name: ruff format
+        entry: ruff format
+        language: system
+        types: [python]
+
+      - id: ruff-check-and-fix
+        name: ruff check --fix
+        entry: ruff check --fix
+        language: system
+        types: [python]
+
       - id: mypy
         name: mypy
         entry: mypy .
         language: system
         types: [python]
         pass_filenames: false
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
