@@ -15,10 +15,10 @@ class BaseRepository[DTO: BaseDTO, ORMModel: BaseORM]:
         self.database = database
 
     async def get_by_id(self, entity_id: UUID) -> DTO | None:
-        res = await self.database.get(self.orm_model, entity_id)
-        if not res:
+        result = await self.database.get(self.orm_model, entity_id)
+        if not result:
             return None
-        return self.dto.model_validate(res)
+        return self.dto.model_validate(result)
 
     async def create(self, data: DTO) -> DTO:
         result = await self.database.scalars(
@@ -27,3 +27,14 @@ class BaseRepository[DTO: BaseDTO, ORMModel: BaseORM]:
             .returning(self.orm_model)
         )
         return self.dto.model_validate(result.one())
+
+    async def bulk_create(self, list_of_dto: list[DTO]) -> list[DTO]:
+        if not list_of_dto:
+            return []
+
+        result = await self.database.scalars(
+            insert(self.orm_model)
+            .values([dto.model_dump() for dto in list_of_dto])
+            .returning(self.orm_model)
+        )
+        return [self.dto.model_validate(obj) for obj in result]
