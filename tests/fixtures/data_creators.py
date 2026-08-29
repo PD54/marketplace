@@ -36,10 +36,10 @@ async def acceptance_in_db(
 
 
 @pytest.fixture
-async def tasks_in_db(
+async def tasks_from_acceptance_in_db(
     task_repository: TaskRepository,
-    tasks_list: list[TaskDTO],
+    tasks_from_acceptance_list: list[TaskDTO],
     acceptance_in_db: AcceptanceDTO,
     sku_in_db: SkuDTO,
 ) -> list[TaskDTO]:
-    return await task_repository.bulk_create(tasks_list)
+    return await task_repository.bulk_create(tasks_from_acceptance_list)

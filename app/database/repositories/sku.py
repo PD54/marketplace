@@ -1,11 +1,11 @@
 from sqlalchemy.dialects.postgresql import insert
 
-from app.database.dto.sku import SkuDTO
+from app.database.dto.sku import SkuDTO, UpdateSkuDTO
 from app.database.orm_models.sku import SkuORM
 from app.database.repositories.base import BaseRepository
 
 
-class SkuRepository(BaseRepository[SkuDTO, SkuORM]):
+class SkuRepository(BaseRepository[SkuDTO, SkuORM, UpdateSkuDTO]):
     dto = SkuDTO
     orm_model = SkuORM
 

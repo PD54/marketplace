@@ -25,4 +25,4 @@ async def test_get_item_info_good_not_found(client: AsyncClient):
     response = await client.get(f"/getItemInfo?id={random_id}")
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Item not found"
+    assert response.json()["detail"] == "Good not found"
