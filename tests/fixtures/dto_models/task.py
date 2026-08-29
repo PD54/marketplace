@@ -1,56 +1,57 @@
-from decimal import Decimal
 from uuid import uuid7
 
 import pytest
 
 from app.database.dto.acceptance import AcceptanceDTO
 from app.database.dto.good import GoodDTO, GoodStock
+from app.database.dto.posting import PostingDTO
 from app.database.dto.sku import SkuDTO
 from app.database.dto.task import TaskDTO, TaskStatus, TaskType
 
 
 @pytest.fixture
-def good_dto(sku_dto: SkuDTO) -> GoodDTO:
-    return GoodDTO(sku_id=sku_dto.id)
-
-
-@pytest.fixture
-def sku_dto() -> SkuDTO:
-    return SkuDTO(base_price=Decimal("5000.00"))
-
-
-@pytest.fixture
-def acceptance_dto() -> AcceptanceDTO:
-    return AcceptanceDTO()
-
-
-@pytest.fixture
-def task_dto(
-    acceptance_dto: AcceptanceDTO,
-    sku_dto: SkuDTO,
+def task_from_acceptance(
+    acceptance: AcceptanceDTO,
+    sku: SkuDTO,
 ) -> TaskDTO:
     return TaskDTO(
         status=TaskStatus.completed,
         task_type=TaskType.placing,
-        acceptance_id=acceptance_dto.id,
-        sku_id=sku_dto.id,
+        acceptance_id=acceptance.id,
+        sku_id=sku.id,
         stock=GoodStock.valid,
         count=25,
     )
 
 
 @pytest.fixture
-def tasks_list(
-    task_dto: TaskDTO,
+def task_picking_in_work(
+    posting: PostingDTO,
+    good_reserved: GoodDTO,
+) -> TaskDTO:
+    return TaskDTO(
+        status=TaskStatus.in_work,
+        task_type=TaskType.picking,
+        posting_id=posting.id,
+        sku_id=good_reserved.sku_id,
+        good_id=good_reserved.id,
+        stock=good_reserved.stock,
+        count=1,
+    )
+
+
+@pytest.fixture
+def tasks_from_acceptance_list(
+    task_from_acceptance: TaskDTO,
 ) -> list[TaskDTO]:
-    completed_task = task_dto
-    in_work_task = task_dto.model_copy(
+    completed_task = task_from_acceptance
+    in_work_task = task_from_acceptance.model_copy(
         update={
             "id": uuid7(),
             "status": TaskStatus.in_work,
         }
     )
-    cancelled_task = task_dto.model_copy(
+    cancelled_task = task_from_acceptance.model_copy(
         update={
             "id": uuid7(),
             "status": TaskStatus.cancelled,

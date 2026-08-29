@@ -19,3 +19,7 @@ class BaseDTO(BaseModel):
     )
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UpdateBaseDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)

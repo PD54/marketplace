@@ -8,12 +8,12 @@ from app.services.sku.dto.create_sku import (
 )
 
 
-async def test_create_sku_success(
+async def test_success(
     client: AsyncClient,
-    sku_dto: SkuDTO,
+    sku: SkuDTO,
     sku_repository: SkuRepository,
 ):
-    sku_to_create = CreateSkuInputDTO.model_validate(sku_dto)
+    sku_to_create = CreateSkuInputDTO.model_validate(sku)
     request_data = sku_to_create.model_dump(mode="json")
     response = await client.post(
         url="/createSku",
@@ -36,7 +36,7 @@ async def test_create_sku_success(
     assert created_sku_in_db.is_hidden == sku_to_create.is_hidden
 
 
-async def test_create_sku_already_exists(
+async def test_sku_already_exists(
     client: AsyncClient,
     sku_in_db: SkuDTO,
 ):

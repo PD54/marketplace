@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import Field
 
-from app.database.dto.base import BaseDTO
+from app.database.dto.base import BaseDTO, UpdateBaseDTO
 from app.database.dto.good import GoodStockWithoutNotFound
 
 
@@ -43,5 +43,40 @@ class TaskDTO(BaseDTO):
         description="Stock status of target entity(ies) of the task",
     )
     count: int = Field(
+        description="Number of target entity(ies) of the task",
+    )
+
+
+class UpdateTaskDTO(UpdateBaseDTO):
+    status: TaskStatus | None = Field(
+        None,
+        description="Status of the task",
+    )
+    task_type: TaskType | None = Field(
+        None,
+        description="Type of the task",
+    )
+    posting_id: UUID | None = Field(
+        None,
+        description="Id of the posting that the task is assigned to",
+    )
+    acceptance_id: UUID | None = Field(
+        None,
+        description="Id of the acceptance that the task is assigned to",
+    )
+    good_id: UUID | None = Field(
+        None,
+        description="Id of the good which is the target of the task",
+    )
+    sku_id: UUID | None = Field(
+        None,
+        description="Id of the sku which is the target of the task",
+    )
+    stock: GoodStockWithoutNotFound | None = Field(
+        None,
+        description="Stock status of target entity(ies) of the task",
+    )
+    count: int | None = Field(
+        None,
         description="Number of target entity(ies) of the task",
     )

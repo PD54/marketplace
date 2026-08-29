@@ -44,7 +44,7 @@ async def send_request_return_output_dto(
     return created_acceptance_from_response
 
 
-async def test_create_acceptance_non_existing_sku_success(
+async def test_non_existing_sku_success(
     client: AsyncClient,
     acceptance_repository: AcceptanceRepository,
     task_repository: TaskRepository,
@@ -76,7 +76,7 @@ async def test_create_acceptance_non_existing_sku_success(
     assert task.acceptance_id == created_acceptance_in_db.id
 
 
-async def test_create_acceptance_existing_sku_success(
+async def test_existing_sku_success(
     client: AsyncClient,
     acceptance_repository: AcceptanceRepository,
     task_repository: TaskRepository,
@@ -113,7 +113,7 @@ async def test_create_acceptance_existing_sku_success(
     assert task.acceptance_id == created_acceptance_in_db.id
 
 
-async def test_create_acceptance_non_existing_and_existing_sku_success(
+async def test_non_existing_and_existing_sku_success(
     client: AsyncClient,
     acceptance_repository: AcceptanceRepository,
     task_repository: TaskRepository,

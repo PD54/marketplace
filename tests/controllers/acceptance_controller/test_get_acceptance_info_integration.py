@@ -10,11 +10,11 @@ from app.services.acceptance.dto.get_acceptance_info import (
 )
 
 
-async def test_get_acceptance_info_success(
+async def test_success(
     client: AsyncClient,
     acceptance_in_db: AcceptanceDTO,
-    tasks_in_db: list[TaskDTO],
-    task_dto: TaskDTO,
+    tasks_from_acceptance_in_db: list[TaskDTO],
+    task_from_acceptance: TaskDTO,
 ):
     response = await client.get(f"getAcceptanceInfo?id={acceptance_in_db.id}")
 
@@ -23,20 +23,22 @@ async def test_get_acceptance_info_success(
     )
 
     expected_accepted = [
-        GetAcceptanceInfoAcceptedItemOutputDTO.model_validate(task_dto)
+        GetAcceptanceInfoAcceptedItemOutputDTO.model_validate(
+            task_from_acceptance,
+        )
     ]
 
     assert actual_output_dto.id == acceptance_in_db.id
     assert actual_output_dto.created_at == acceptance_in_db.created_at
     assert actual_output_dto.accepted == expected_accepted
 
-    assert len(actual_output_dto.task_ids) == len(tasks_in_db)
+    assert len(actual_output_dto.task_ids) == len(tasks_from_acceptance_in_db)
     assert {task.id for task in actual_output_dto.task_ids} == {
-        task.id for task in tasks_in_db
+        task.id for task in tasks_from_acceptance_in_db
     }
 
 
-async def test_get_acceptance_info_not_found(
+async def test_acceptance_not_found(
     client: AsyncClient,
 ):
     random_id = uuid7()
