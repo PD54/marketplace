@@ -7,7 +7,7 @@ from app.database.dto.good import GoodDTO
 from app.database.dto.sku import SkuDTO
 from app.database.repositories.good import GoodRepository
 from app.database.repositories.sku import SkuRepository
-from app.services.good.exceptions import ItemNotFoundError
+from app.services.good.exceptions import GoodNotFoundError
 from app.services.good.get_item_info_service import GetItemInfoService
 from app.services.sku.exceptions import SkuNotFoundError
 
@@ -54,7 +54,7 @@ async def test_good_not_found(
         return_value=None,
     )
 
-    with pytest.raises(ItemNotFoundError):
+    with pytest.raises(GoodNotFoundError):
         await get_item_info_service.get_item_info(good_id=id_to_search)
 
 

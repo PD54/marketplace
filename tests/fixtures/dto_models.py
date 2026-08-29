@@ -5,6 +5,7 @@ import pytest
 
 from app.database.dto.acceptance import AcceptanceDTO
 from app.database.dto.good import GoodDTO, GoodStock
+from app.database.dto.posting import PostingDTO
 from app.database.dto.sku import SkuDTO
 from app.database.dto.task import TaskDTO, TaskStatus, TaskType
 
@@ -25,7 +26,12 @@ def acceptance_dto() -> AcceptanceDTO:
 
 
 @pytest.fixture
-def task_dto(
+def posting_dto() -> PostingDTO:
+    return PostingDTO()
+
+
+@pytest.fixture
+def task_from_acceptance_dto(
     acceptance_dto: AcceptanceDTO,
     sku_dto: SkuDTO,
 ) -> TaskDTO:
@@ -40,17 +46,34 @@ def task_dto(
 
 
 @pytest.fixture
-def tasks_list(
-    task_dto: TaskDTO,
+def task_from_posting_dto(
+    posting_dto: PostingDTO,
+    sku_dto: SkuDTO,
+    good_dto: GoodDTO,
+) -> TaskDTO:
+    return TaskDTO(
+        status=TaskStatus.completed,
+        task_type=TaskType.picking,
+        posting_id=posting_dto.id,
+        sku_id=sku_dto.id,
+        good_id=good_dto.id,
+        stock=GoodStock.valid,
+        count=1,
+    )
+
+
+@pytest.fixture
+def tasks_from_acceptance_list(
+    task_from_acceptance_dto: TaskDTO,
 ) -> list[TaskDTO]:
-    completed_task = task_dto
-    in_work_task = task_dto.model_copy(
+    completed_task = task_from_acceptance_dto
+    in_work_task = task_from_acceptance_dto.model_copy(
         update={
             "id": uuid7(),
             "status": TaskStatus.in_work,
         }
     )
-    cancelled_task = task_dto.model_copy(
+    cancelled_task = task_from_acceptance_dto.model_copy(
         update={
             "id": uuid7(),
             "status": TaskStatus.cancelled,

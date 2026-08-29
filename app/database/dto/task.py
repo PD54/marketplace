@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import Field
 
-from app.database.dto.base import BaseDTO
+from app.database.dto.base import BaseDTO, UpdateBaseDTO
 from app.database.dto.good import GoodStockWithoutNotFound
 
 
@@ -44,4 +44,11 @@ class TaskDTO(BaseDTO):
     )
     count: int = Field(
         description="Number of target entity(ies) of the task",
+    )
+
+
+class UpdateTaskDTO(UpdateBaseDTO):
+    status: TaskStatus = Field(
+        TaskStatus.in_work,
+        description="Status of the task",
     )

@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import Field
 
-from app.database.dto.base import BaseDTO
+from app.database.dto.base import BaseDTO, UpdateBaseDTO
 
 
 class GoodStock(StrEnum):
@@ -26,5 +26,16 @@ class GoodDTO(BaseDTO):
     )
     reserved_state: bool = Field(
         False,
+        description="Flag that tells if the good is reserved",
+    )
+
+
+class UpdateGoodDTO(UpdateBaseDTO):
+    stock: GoodStock | None = Field(
+        None,
+        description="Stock status of the good.",
+    )
+    reserved_state: bool | None = Field(
+        None,
         description="Flag that tells if the good is reserved",
     )

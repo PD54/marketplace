@@ -1,13 +1,19 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
+from sqlalchemy import update as sa_update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.dto.base import BaseDTO
+from app.database.dto.base import BaseDTO, UpdateBaseDTO
 from app.database.orm_models.base import BaseORM
 
 
-class BaseRepository[DTO: BaseDTO, ORMModel: BaseORM]:
+class BaseRepository[
+    DTO: BaseDTO,
+    ORMModel: BaseORM,
+    UpdateDTO: UpdateBaseDTO,
+]:
     dto: type[DTO]
     orm_model: type[ORMModel]
 
@@ -38,3 +44,20 @@ class BaseRepository[DTO: BaseDTO, ORMModel: BaseORM]:
             .returning(self.orm_model)
         )
         return [self.dto.model_validate(obj) for obj in result]
+
+    async def update(
+        self,
+        entity_id: UUID,
+        update_dto: UpdateDTO,
+    ) -> DTO | None:
+        update_fields = update_dto.model_dump(exclude_unset=True)
+        update_fields["updated_at"] = datetime.now(UTC)
+
+        result = await self.database.scalars(
+            sa_update(self.orm_model)
+            .where(self.orm_model.id == entity_id)
+            .values(update_fields)
+            .returning(self.orm_model)
+        )
+        obj = result.one_or_none()
+        return self.dto.model_validate(obj) if obj else None
