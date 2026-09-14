@@ -49,15 +49,12 @@ class BaseRepository[
         self,
         entity_id: UUID,
         update_dto: UpdateDTO,
-    ) -> DTO | None:
+    ) -> None:
         update_fields = update_dto.model_dump(exclude_unset=True)
         update_fields["updated_at"] = datetime.now(UTC)
 
-        result = await self.database.scalars(
+        await self.database.execute(
             sa_update(self.orm_model)
             .where(self.orm_model.id == entity_id)
             .values(update_fields)
-            .returning(self.orm_model)
         )
-        obj = result.one_or_none()
-        return self.dto.model_validate(obj) if obj else None

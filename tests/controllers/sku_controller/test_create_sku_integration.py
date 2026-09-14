@@ -10,10 +10,10 @@ from app.services.sku.dto.create_sku import (
 
 async def test_create_sku_success(
     client: AsyncClient,
-    sku_dto: SkuDTO,
+    sku: SkuDTO,
     sku_repository: SkuRepository,
 ):
-    sku_to_create = CreateSkuInputDTO.model_validate(sku_dto)
+    sku_to_create = CreateSkuInputDTO.model_validate(sku)
     request_data = sku_to_create.model_dump(mode="json")
     response = await client.post(
         url="/createSku",

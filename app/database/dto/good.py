@@ -31,6 +31,10 @@ class GoodDTO(BaseDTO):
 
 
 class UpdateGoodDTO(UpdateBaseDTO):
+    sku_id: UUID | None = Field(
+        None,
+        description="Id of the SKU that the good belongs to (foreign key)",
+    )
     stock: GoodStock | None = Field(
         None,
         description="Stock status of the good.",

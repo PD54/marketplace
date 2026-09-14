@@ -12,11 +12,11 @@ async def test_toggle_is_hidden_success(
     client: AsyncClient,
     sku_repository: SkuRepository,
 ):
-    toggle_is_hidden_input_dto = ToggleIsHiddenInputDTO(
+    input_dto = ToggleIsHiddenInputDTO(
         sku_id=sku_in_db.id,
         is_hidden=True,
     )
-    request_data = toggle_is_hidden_input_dto.model_dump(mode="json")
+    request_data = input_dto.model_dump(mode="json")
     response = await client.post(
         url="/toggleIsHidden",
         json=request_data,
@@ -24,23 +24,38 @@ async def test_toggle_is_hidden_success(
 
     updated_sku = await sku_repository.get_by_id(sku_in_db.id)
 
-    expected_is_hidden = toggle_is_hidden_input_dto.is_hidden
-    actual_is_hidden = updated_sku.is_hidden
+    assert response.status_code == 200
+    assert updated_sku.is_hidden is True
+    assert updated_sku.updated_at > sku_in_db.updated_at
 
-    previous_updated_at = sku_in_db.updated_at
-    new_updated_at = updated_sku.updated_at
+
+async def test_toggle_is_hidden_with_same_is_hidden_value(
+    sku_in_db: SkuDTO,
+    client: AsyncClient,
+    sku_repository: SkuRepository,
+):
+    input_dto = ToggleIsHiddenInputDTO(
+        sku_id=sku_in_db.id,
+        is_hidden=sku_in_db.is_hidden,
+    )
+    request_data = input_dto.model_dump(mode="json")
+    response = await client.post(
+        url="/toggleIsHidden",
+        json=request_data,
+    )
+
+    current_sku = await sku_repository.get_by_id(sku_in_db.id)
 
     assert response.status_code == 200
-    assert expected_is_hidden == actual_is_hidden
-    assert previous_updated_at != new_updated_at
+    assert sku_in_db.updated_at == current_sku.updated_at
 
 
 async def test_toggle_is_hidden_sku_not_found(client: AsyncClient):
-    toggle_is_hidden_input_dto = ToggleIsHiddenInputDTO(
+    input_dto = ToggleIsHiddenInputDTO(
         sku_id=uuid7(),
         is_hidden=True,
     )
-    request_data = toggle_is_hidden_input_dto.model_dump(mode="json")
+    request_data = input_dto.model_dump(mode="json")
     response = await client.post(
         url="/toggleIsHidden",
         json=request_data,

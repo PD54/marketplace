@@ -14,7 +14,7 @@ async def test_get_acceptance_info_success(
     client: AsyncClient,
     acceptance_in_db: AcceptanceDTO,
     tasks_from_acceptance_in_db: list[TaskDTO],
-    task_from_acceptance_dto: TaskDTO,
+    task_from_acceptance: TaskDTO,
 ):
     response = await client.get(f"getAcceptanceInfo?id={acceptance_in_db.id}")
 
@@ -24,7 +24,7 @@ async def test_get_acceptance_info_success(
 
     expected_accepted = [
         GetAcceptanceInfoAcceptedItemOutputDTO.model_validate(
-            task_from_acceptance_dto,
+            task_from_acceptance,
         )
     ]
 

@@ -11,7 +11,7 @@ class GoodRepository(BaseRepository[GoodDTO, GoodORM, UpdateGoodDTO]):
     dto = GoodDTO
     orm_model = GoodORM
 
-    async def grab_avail_by_sku_and_stock(
+    async def pick_available_by_sku_and_stock(
         self,
         sku_id: UUID,
         stock: GoodStock,

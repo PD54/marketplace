@@ -19,15 +19,22 @@ class ToggleIsHiddenService:
         logger.info(
             f"SKU {input_dto.sku_id}: смена is_hidden на {input_dto.is_hidden}"
         )
-        result = await self.sku_repo.update(
-            entity_id=input_dto.sku_id,
-            update_dto=UpdateSkuDTO(is_hidden=input_dto.is_hidden),
-        )
-
-        if not result:
+        sku = await self.sku_repo.get_by_id(input_dto.sku_id)
+        if not sku:
             logger.error(f"SKU с id {input_dto.sku_id} не найдена")
             raise SkuNotFoundError()
 
+        if sku.is_hidden == input_dto.is_hidden:
+            logger.info(
+                f"SKU с id {input_dto.sku_id}"
+                f" уже имеет is_hidden = {input_dto.is_hidden}"
+            )
+            return
+
+        await self.sku_repo.update(
+            entity_id=input_dto.sku_id,
+            update_dto=UpdateSkuDTO(is_hidden=input_dto.is_hidden),
+        )
         logger.info(
             f"SKU {input_dto.sku_id}: "
             f"значение is_hidden изменено на {input_dto.is_hidden}"
