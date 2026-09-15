@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.repositories.acceptance import AcceptanceRepository
 from app.database.repositories.good import GoodRepository
+from app.database.repositories.posting_good import PostingGoodRepository
 from app.database.repositories.sku import SkuRepository
 from app.database.repositories.task import TaskRepository
 from app.dependencies.session_generator import get_db
@@ -30,3 +31,9 @@ def get_acceptance_repository(
     database: AsyncSession = Depends(get_db),
 ) -> AcceptanceRepository:
     return AcceptanceRepository(database=database)
+
+
+def get_posting_good_repository(
+    database: AsyncSession = Depends(get_db),
+) -> PostingGoodRepository:
+    return PostingGoodRepository(database=database)

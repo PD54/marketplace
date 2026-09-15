@@ -4,7 +4,7 @@ from uuid import UUID
 from app.database.repositories.good import GoodRepository
 from app.database.repositories.sku import SkuRepository
 from app.services.good.dto.get_item_info import GetItemInfoOutputDTO
-from app.services.good.exceptions import ItemNotFoundError
+from app.services.good.exceptions import GoodNotFoundError
 from app.services.sku.exceptions import SkuNotFoundError
 
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class GetItemInfoService:
         good = await self.good_repo.get_by_id(entity_id=good_id)
         if not good:
             logger.error(f"Не найден товар с id {good_id}")
-            raise ItemNotFoundError()
+            raise GoodNotFoundError()
 
         logger.info(f"Поиск SKU с id {good.sku_id}")
         sku = await self.sku_repo.get_by_id(entity_id=good.sku_id)
