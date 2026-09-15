@@ -10,7 +10,7 @@ from app.services.acceptance.dto.get_acceptance_info import (
 )
 
 
-async def test_get_acceptance_info_success(
+async def test_success(
     client: AsyncClient,
     acceptance_in_db: AcceptanceDTO,
     tasks_from_acceptance_in_db: list[TaskDTO],
@@ -38,7 +38,7 @@ async def test_get_acceptance_info_success(
     }
 
 
-async def test_get_acceptance_info_not_found(
+async def test_acceptance_not_found(
     client: AsyncClient,
 ):
     random_id = uuid7()

@@ -7,7 +7,7 @@ from app.database.repositories.sku import SkuRepository
 from app.services.sku.dto.toggle_is_hidden import ToggleIsHiddenInputDTO
 
 
-async def test_toggle_is_hidden_success(
+async def test_happy_path(
     sku_in_db: SkuDTO,
     client: AsyncClient,
     sku_repository: SkuRepository,
@@ -29,7 +29,7 @@ async def test_toggle_is_hidden_success(
     assert updated_sku.updated_at > sku_in_db.updated_at
 
 
-async def test_toggle_is_hidden_with_same_is_hidden_value(
+async def test_with_same_is_hidden_value_success(
     sku_in_db: SkuDTO,
     client: AsyncClient,
     sku_repository: SkuRepository,
@@ -48,9 +48,10 @@ async def test_toggle_is_hidden_with_same_is_hidden_value(
 
     assert response.status_code == 200
     assert sku_in_db.updated_at == current_sku.updated_at
+    assert sku_in_db.is_hidden == current_sku.is_hidden
 
 
-async def test_toggle_is_hidden_sku_not_found(client: AsyncClient):
+async def test_sku_not_found_error(client: AsyncClient):
     input_dto = ToggleIsHiddenInputDTO(
         sku_id=uuid7(),
         is_hidden=True,

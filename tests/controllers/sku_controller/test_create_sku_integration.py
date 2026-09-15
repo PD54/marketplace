@@ -8,7 +8,7 @@ from app.services.sku.dto.create_sku import (
 )
 
 
-async def test_create_sku_success(
+async def test_success(
     client: AsyncClient,
     sku: SkuDTO,
     sku_repository: SkuRepository,
@@ -36,7 +36,7 @@ async def test_create_sku_success(
     assert created_sku_in_db.is_hidden == sku_to_create.is_hidden
 
 
-async def test_create_sku_already_exists(
+async def test_sku_already_exists(
     client: AsyncClient,
     sku_in_db: SkuDTO,
 ):

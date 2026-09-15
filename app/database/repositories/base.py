@@ -50,7 +50,10 @@ class BaseRepository[
         entity_id: UUID,
         update_dto: UpdateDTO,
     ) -> None:
-        update_fields = update_dto.model_dump(exclude_unset=True)
+        update_fields = update_dto.model_dump(
+            exclude_unset=True,
+            exclude={"id"},
+        )
         update_fields["updated_at"] = datetime.now(UTC)
 
         await self.database.execute(

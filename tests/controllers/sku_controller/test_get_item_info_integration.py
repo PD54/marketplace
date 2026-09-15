@@ -6,7 +6,7 @@ from app.database.dto.good import GoodDTO
 from app.services.good.dto.get_item_info import GetItemInfoOutputDTO
 
 
-async def test_get_item_info_success(
+async def test_success(
     client: AsyncClient,
     good_in_db: GoodDTO,
 ):
@@ -20,7 +20,7 @@ async def test_get_item_info_success(
     assert actual == expected
 
 
-async def test_get_item_info_good_not_found(client: AsyncClient):
+async def test_good_not_found(client: AsyncClient):
     random_id = uuid7()
     response = await client.get(f"/getItemInfo?id={random_id}")
 

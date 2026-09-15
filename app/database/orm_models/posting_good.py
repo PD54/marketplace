@@ -1,7 +1,7 @@
 from decimal import Decimal
 from uuid import UUID
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.orm_models import BaseORM
@@ -25,3 +25,12 @@ class PostingGoodORM(BaseORM):
     good_cost: Mapped[Decimal] = mapped_column()
     good_stock: Mapped[str] = mapped_column()
     cancel_reason: Mapped[str | None] = mapped_column()
+
+    __table_args__ = (
+        Index(
+            "uix_posting_goods_good_id",
+            "good_id",
+            unique=True,
+            postgresql_where=cancel_reason.is_(None),
+        ),
+    )

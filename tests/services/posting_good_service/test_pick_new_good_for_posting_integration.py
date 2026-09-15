@@ -11,7 +11,7 @@ from app.services.posting_good.pick_new_good_for_posting_service import (
 
 
 @pytest.fixture
-def pick_new_good_for_posting_service(
+def service(
     good_repository: GoodRepository,
     task_repository: TaskRepository,
     posting_good_repository: PostingGoodRepository,
@@ -23,17 +23,15 @@ def pick_new_good_for_posting_service(
     )
 
 
-async def test_pick_new_good_for_posting_success(
+async def test_happy_path(
     posting_good_in_db: PostingGoodDTO,
     good_in_db: GoodDTO,
-    pick_new_good_for_posting_service: PickNewGoodForPostingService,
+    service: PickNewGoodForPostingService,
     posting_good_repository: PostingGoodRepository,
     task_repository: TaskRepository,
     good_repository: GoodRepository,
 ):
-    result = await pick_new_good_for_posting_service.pick_new_good(
-        posting_good_in_db,
-    )
+    result = await service.pick_new_good(posting_good_in_db)
 
     new_good = await good_repository.get_by_id(result.good_id)
     posting_goods_with_new_good = await posting_good_repository.get_by_good_id(
@@ -41,31 +39,29 @@ async def test_pick_new_good_for_posting_success(
     )
     tasks_with_new_good = await task_repository.get_by_good_id(new_good.id)
 
+    new_posting_good = posting_goods_with_new_good[0]
+    new_task = tasks_with_new_good[0]
+
     assert new_good.id == good_in_db.id
     assert new_good.sku_id == posting_good_in_db.good_sku_id
     assert new_good.stock == posting_good_in_db.good_stock
     assert new_good.reserved_state is True
 
     assert len(posting_goods_with_new_good) == 1
-    assert posting_goods_with_new_good[0].good_id == good_in_db.id
-    assert (
-        posting_goods_with_new_good[0].posting_id
-        == posting_good_in_db.posting_id
-    )
-    assert posting_goods_with_new_good[0] == result
+    assert new_posting_good.good_id == good_in_db.id
+    assert new_posting_good.posting_id == posting_good_in_db.posting_id
+    assert new_posting_good == result
 
     assert len(tasks_with_new_good) == 1
-    assert tasks_with_new_good[0].good_id == good_in_db.id
-    assert tasks_with_new_good[0].posting_id == posting_good_in_db.posting_id
+    assert new_task.good_id == good_in_db.id
+    assert new_task.posting_id == posting_good_in_db.posting_id
 
 
-async def test_pick_new_good_for_posting_good_not_found(
+async def test_good_not_found(
     reserved_good_in_db: GoodDTO,
     posting_good_in_db: PostingGoodDTO,
-    pick_new_good_for_posting_service: PickNewGoodForPostingService,
+    service: PickNewGoodForPostingService,
 ):
-    result = await pick_new_good_for_posting_service.pick_new_good(
-        posting_good_in_db
-    )
+    result = await service.pick_new_good(posting_good_in_db)
 
     assert result is None

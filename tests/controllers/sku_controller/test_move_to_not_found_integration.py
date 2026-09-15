@@ -1,34 +1,25 @@
 from uuid import uuid7
 
-import pytest
 from httpx import AsyncClient
 
 from app.database.dto.good import GoodDTO, GoodStock
-from app.database.dto.posting_good import PostingGoodDTO
-from app.database.dto.sku import SkuDTO
-from app.database.dto.task import TaskStatus
+from app.database.dto.posting_good import (
+    PostingGoodCancelReason,
+    PostingGoodDTO,
+)
+from app.database.dto.task import TaskDTO, TaskStatus
 from app.database.repositories.good import GoodRepository
 from app.database.repositories.posting_good import PostingGoodRepository
 from app.database.repositories.task import TaskRepository
 from app.services.good.dto.move_to_not_found import MoveToNotFoundInputDTO
 
 
-@pytest.fixture
-async def good_with_not_found_stock_in_db(
-    good: GoodDTO,
-    sku_in_db: SkuDTO,
-    good_repository: GoodRepository,
-) -> GoodDTO:
-    return await good_repository.create(
-        good.model_copy(update={"stock": GoodStock.not_found})
-    )
-
-
-async def test_move_to_not_found_success(
+async def test_happy_path(
     client: AsyncClient,
     reserved_good_in_db: GoodDTO,
+    good_in_db: GoodDTO,
     posting_good_in_db: PostingGoodDTO,
-    tasks_from_posting_in_db: TaskRepository,
+    in_work_picking_task_in_db: TaskDTO,
     good_repository: GoodRepository,
     posting_good_repository: PostingGoodRepository,
     task_repository: TaskRepository,
@@ -40,11 +31,63 @@ async def test_move_to_not_found_success(
     updated_good = await good_repository.get_by_id(
         reserved_good_in_db.id,
     )
-    updated_posting_goods_list = await posting_good_repository.get_by_good_id(
+    updated_posting_good = await posting_good_repository.get_by_id(
+        posting_good_in_db.id,
+    )
+    updated_task = await task_repository.get_by_id(
+        in_work_picking_task_in_db.id,
+    )
+
+    new_good_posting_goods = await posting_good_repository.get_by_good_id(
+        good_in_db.id,
+    )
+    new_good_tasks = await task_repository.get_by_good_id(good_in_db.id)
+
+    new_posting_good = new_good_posting_goods[0]
+    new_task = new_good_tasks[0]
+
+    assert response.status_code == 200
+
+    assert updated_good.reserved_state is False
+    assert updated_good.stock == GoodStock.not_found
+
+    assert (
+        updated_posting_good.cancel_reason
+        == PostingGoodCancelReason.good_not_found
+    )
+
+    assert updated_task.status == TaskStatus.cancelled
+
+    assert new_posting_good.good_id == good_in_db.id
+    assert new_posting_good.posting_id == updated_posting_good.posting_id
+    assert new_posting_good.good_stock == updated_posting_good.good_stock
+    assert new_posting_good.good_sku_id == updated_posting_good.good_sku_id
+
+    assert new_task.good_id == good_in_db.id
+    assert new_task.posting_id == updated_posting_good.posting_id
+
+
+async def test_success_without_new_good(
+    client: AsyncClient,
+    reserved_good_in_db: GoodDTO,
+    posting_good_in_db: PostingGoodDTO,
+    in_work_picking_task_in_db: TaskDTO,
+    good_repository: GoodRepository,
+    posting_good_repository: PostingGoodRepository,
+    task_repository: TaskRepository,
+):
+    input_dto = MoveToNotFoundInputDTO(id=reserved_good_in_db.id)
+    request_data = input_dto.model_dump(mode="json")
+    response = await client.post(url="/moveToNotFound", json=request_data)
+
+    updated_good = await good_repository.get_by_id(
         reserved_good_in_db.id,
     )
-    updated_tasks_list = await task_repository.get_by_good_id(
-        reserved_good_in_db.id,
+    updated_posting_good = await posting_good_repository.get_by_id(
+        posting_good_in_db.id,
+    )
+    updated_task = await task_repository.get_by_id(
+        in_work_picking_task_in_db.id,
     )
 
     assert response.status_code == 200
@@ -52,14 +95,15 @@ async def test_move_to_not_found_success(
     assert updated_good.reserved_state is False
     assert updated_good.stock == GoodStock.not_found
 
-    for posting_good in updated_posting_goods_list:
-        assert posting_good.cancel_reason
+    assert (
+        updated_posting_good.cancel_reason
+        == PostingGoodCancelReason.good_not_found
+    )
 
-    for task in updated_tasks_list:
-        assert task.status != TaskStatus.in_work
+    assert updated_task.status == TaskStatus.cancelled
 
 
-async def test_move_to_not_found_good_not_found_error(
+async def test_good_not_found_error(
     client: AsyncClient,
 ):
     input_dto = MoveToNotFoundInputDTO(id=uuid7())
@@ -70,7 +114,7 @@ async def test_move_to_not_found_good_not_found_error(
     assert response.json()["detail"] == "Good not found"
 
 
-async def test_move_to_not_found_already_on_not_found_stock(
+async def test_already_on_not_found_stock_error(
     client: AsyncClient,
     good_with_not_found_stock_in_db: GoodDTO,
 ):

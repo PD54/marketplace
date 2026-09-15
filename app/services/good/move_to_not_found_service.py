@@ -59,8 +59,8 @@ class MoveToNotFoundService:
             ),
         )
         logger.info(
-            "Товар {updated_good.id} перемещён на сток not_found;"
-            " reserved_state установлен в False"
+            f"Товар {good.id} перемещён на сток not_found;"
+            f" reserved_state установлен в False"
         )
 
         cancelled_posting_goods = await self.cancel_posting_goods(good)
@@ -71,8 +71,6 @@ class MoveToNotFoundService:
             await self.pick_new_good_for_posting_service.pick_new_good(
                 cancelled_posting_good,
             )
-
-        return None
 
     async def cancel_posting_goods(
         self,
@@ -98,9 +96,12 @@ class MoveToNotFoundService:
                     cancel_reason=PostingGoodCancelReason.good_not_found,
                 ),
             )
+            logger.info(
+                f"Отменена запись с id {posting_good.id} с товаром в заказе"
+            )
 
         logger.info(
-            f"Отменено {len(posting_goods_to_cancel)} "
+            f"Итого отменено {len(posting_goods_to_cancel)} "
             f"записей с товаром в заказах"
         )
 
@@ -125,9 +126,10 @@ class MoveToNotFoundService:
                 ),
             )
             cancelled_tasks_count += 1
+            logger.info(
+                f"Отменена связанная с товаром активная задача с id {task.id}"
+            )
 
         logger.info(
             f"Отменено {cancelled_tasks_count} связанных активных задач"
         )
-
-        return None
