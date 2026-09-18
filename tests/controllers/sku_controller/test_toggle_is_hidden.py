@@ -51,7 +51,7 @@ async def test_with_same_is_hidden_value_success(
     assert sku_in_db.is_hidden == current_sku.is_hidden
 
 
-async def test_sku_not_found_error(client: AsyncClient):
+async def test_sku_not_found(client: AsyncClient):
     input_dto = ToggleIsHiddenInputDTO(
         sku_id=uuid7(),
         is_hidden=True,

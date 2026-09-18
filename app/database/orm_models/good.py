@@ -1,6 +1,7 @@
+from decimal import Decimal
 from uuid import UUID
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.orm_models.base import BaseORM
@@ -20,4 +21,8 @@ class GoodORM(BaseORM):
     reserved_state: Mapped[bool] = mapped_column(
         default=False,
         server_default="f",
+    )
+    discount_percentage: Mapped[Decimal] = mapped_column(
+        Numeric(precision=5, scale=2),
+        server_default="0.00",
     )
