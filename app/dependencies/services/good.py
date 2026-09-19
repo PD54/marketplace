@@ -14,6 +14,7 @@ from app.dependencies.services.posting_good import (
     get_pick_new_good_for_posting_service,
 )
 from app.services.good.get_item_info_service import GetItemInfoService
+from app.services.good.markdown_item_service import MarkdownItemService
 from app.services.good.move_to_not_found_service import MoveToNotFoundService
 from app.services.posting_good.pick_new_good_for_posting_service import (
     PickNewGoodForPostingService,
@@ -38,6 +39,24 @@ def get_move_to_not_found_service(
     ),
 ) -> MoveToNotFoundService:
     return MoveToNotFoundService(
+        good_repo=good_repo,
+        task_repo=task_repo,
+        posting_good_repo=posting_good_repo,
+        pick_new_good_for_posting_service=pick_new_good_for_posting_service,
+    )
+
+
+def get_markdown_item_service(
+    good_repo: GoodRepository = Depends(get_good_repository),
+    task_repo: TaskRepository = Depends(get_task_repository),
+    posting_good_repo: PostingGoodRepository = Depends(
+        get_posting_good_repository,
+    ),
+    pick_new_good_for_posting_service: PickNewGoodForPostingService = Depends(
+        get_pick_new_good_for_posting_service,
+    ),
+) -> MarkdownItemService:
+    return MarkdownItemService(
         good_repo=good_repo,
         task_repo=task_repo,
         posting_good_repo=posting_good_repo,

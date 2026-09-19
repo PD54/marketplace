@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 
 from app.database.dto.good import GoodDTO, GoodStock
@@ -22,4 +24,13 @@ def good_with_not_found_stock(sku: SkuDTO) -> GoodDTO:
     return GoodDTO(
         sku_id=sku.id,
         stock=GoodStock.not_found,
+    )
+
+
+@pytest.fixture
+def good_with_defect_stock(sku: SkuDTO) -> GoodDTO:
+    return GoodDTO(
+        sku_id=sku.id,
+        stock=GoodStock.defect,
+        discount_percentage=Decimal("15.00"),
     )

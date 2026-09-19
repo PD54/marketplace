@@ -1,3 +1,4 @@
+from decimal import Decimal
 from enum import StrEnum
 from typing import Literal
 from uuid import UUID
@@ -28,6 +29,10 @@ class GoodDTO(BaseDTO):
         False,
         description="Flag that tells if the good is reserved",
     )
+    discount_percentage: Decimal = Field(
+        Decimal("0.00"),
+        description="Discount percentage of the good",
+    )
 
 
 class UpdateGoodDTO(UpdateBaseDTO):
@@ -42,4 +47,8 @@ class UpdateGoodDTO(UpdateBaseDTO):
     reserved_state: bool | None = Field(
         None,
         description="Flag that tells if the good is reserved",
+    )
+    discount_percentage: Decimal | None = Field(
+        None,
+        description="Discount percentage of the good",
     )

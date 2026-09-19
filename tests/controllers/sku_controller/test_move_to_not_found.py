@@ -103,7 +103,7 @@ async def test_success_without_new_good(
     assert updated_task.status == TaskStatus.cancelled
 
 
-async def test_good_not_found_error(
+async def test_good_not_found(
     client: AsyncClient,
 ):
     input_dto = MoveToNotFoundInputDTO(id=uuid7())
@@ -114,7 +114,7 @@ async def test_good_not_found_error(
     assert response.json()["detail"] == "Good not found"
 
 
-async def test_already_on_not_found_stock_error(
+async def test_already_on_not_found_stock(
     client: AsyncClient,
     good_with_not_found_stock_in_db: GoodDTO,
 ):
