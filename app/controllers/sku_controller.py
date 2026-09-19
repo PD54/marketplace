@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query, Response, status
 
 from app.dependencies.services.good import (
+    get_get_item_info_by_sku_id_service,
     get_get_item_info_service,
     get_markdown_item_service,
     get_move_to_not_found_service,
@@ -13,8 +14,14 @@ from app.dependencies.services.sku import (
     get_toggle_is_hidden_service,
 )
 from app.services.good.dto.get_item_info import GetItemInfoOutputDTO
+from app.services.good.dto.get_item_info_by_sku_id import (
+    GetItemInfoBySkuIdOutputDTO,
+)
 from app.services.good.dto.markdown_item import MarkdownItemInputDTO
 from app.services.good.dto.move_to_not_found import MoveToNotFoundInputDTO
+from app.services.good.get_item_info_by_sku_id_service import (
+    GetItemInfoBySkuIdService,
+)
 from app.services.good.get_item_info_service import GetItemInfoService
 from app.services.good.markdown_item_service import MarkdownItemService
 from app.services.good.move_to_not_found_service import MoveToNotFoundService
@@ -40,7 +47,21 @@ async def get_item_info(
     ),
     service: GetItemInfoService = Depends(get_get_item_info_service),
 ) -> GetItemInfoOutputDTO:
-    return await service.get_item_info(good_id=good_id)
+    return await service.get_item_info(good_id)
+
+
+@router.get("/getItemInfoBySkuId")
+async def get_item_info_by_sku_id(
+    sku_id: UUID = Query(
+        ...,
+        alias="id",
+        description="Id of the SKU",
+    ),
+    service: GetItemInfoBySkuIdService = Depends(
+        get_get_item_info_by_sku_id_service
+    ),
+) -> GetItemInfoBySkuIdOutputDTO:
+    return await service.get_item_info_by_sku_id(sku_id)
 
 
 @router.post("/createSku")
