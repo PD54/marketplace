@@ -13,6 +13,9 @@ from app.dependencies.repositories import (
 from app.dependencies.services.posting_good import (
     get_pick_new_good_for_posting_service,
 )
+from app.services.good.get_item_info_by_sku_id_service import (
+    GetItemInfoBySkuIdService,
+)
 from app.services.good.get_item_info_service import GetItemInfoService
 from app.services.good.markdown_item_service import MarkdownItemService
 from app.services.good.move_to_not_found_service import MoveToNotFoundService
@@ -62,3 +65,9 @@ def get_markdown_item_service(
         posting_good_repo=posting_good_repo,
         pick_new_good_for_posting_service=pick_new_good_for_posting_service,
     )
+
+
+def get_get_item_info_by_sku_id_service(
+    good_repo: GoodRepository = Depends(get_good_repository),
+) -> GetItemInfoBySkuIdService:
+    return GetItemInfoBySkuIdService(good_repo=good_repo)

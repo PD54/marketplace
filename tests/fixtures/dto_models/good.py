@@ -34,3 +34,18 @@ def good_with_defect_stock(sku: SkuDTO) -> GoodDTO:
         stock=GoodStock.defect,
         discount_percentage=Decimal("15.00"),
     )
+
+
+@pytest.fixture
+def goods(
+    good: GoodDTO,
+    good_reserved: GoodDTO,
+    good_with_not_found_stock: GoodDTO,
+    good_with_defect_stock: GoodDTO,
+) -> list[GoodDTO]:
+    return [
+        good,
+        good_reserved,
+        good_with_not_found_stock,
+        good_with_defect_stock,
+    ]

@@ -39,3 +39,12 @@ async def good_with_defect_stock_in_db(
     sku_in_db: SkuDTO,
 ) -> GoodDTO:
     return await good_repository.create(good_with_defect_stock)
+
+
+@pytest.fixture
+async def goods_in_db(
+    good_repository: GoodRepository,
+    goods: list[GoodDTO],
+    sku_in_db: SkuDTO,
+) -> list[GoodDTO]:
+    return await good_repository.bulk_create(goods)

@@ -29,3 +29,9 @@ class GoodRepository(BaseRepository[GoodDTO, GoodORM, UpdateGoodDTO]):
 
         obj = result.one_or_none()
         return GoodDTO.model_validate(obj) if obj else None
+
+    async def get_all_by_sku_id(self, sku_id: UUID) -> list[GoodDTO]:
+        result = await self.database.scalars(
+            select(self.orm_model).where(self.orm_model.sku_id == sku_id)
+        )
+        return [GoodDTO.model_validate(obj) for obj in result.all()]
