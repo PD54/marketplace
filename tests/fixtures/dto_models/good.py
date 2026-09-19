@@ -37,7 +37,7 @@ def good_with_defect_stock(sku: SkuDTO) -> GoodDTO:
 
 
 @pytest.fixture
-def goods(
+def goods_list(
     good: GoodDTO,
     good_reserved: GoodDTO,
     good_with_not_found_stock: GoodDTO,

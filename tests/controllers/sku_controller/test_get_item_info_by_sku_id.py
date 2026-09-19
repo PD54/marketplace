@@ -11,7 +11,7 @@ from app.services.good.dto.get_item_info_by_sku_id import (
 async def test_happy_path(
     client: AsyncClient,
     sku_in_db: SkuDTO,
-    goods_in_db: list[GoodDTO],
+    goods_list_in_db: list[GoodDTO],
 ):
     response = await client.get(f"getItemInfoBySkuId?id={sku_in_db.id}")
     data = response.json()
@@ -24,14 +24,14 @@ async def test_happy_path(
             stock=good.stock,
             reserved_state=good.reserved_state,
         )
-        for good in goods_in_db
+        for good in goods_list_in_db
     ]
 
     actual_list_of_goods.sort(
-        key=lambda good: (good.item_id, good.stock, good.reserved_state),
+        key=lambda good: good.item_id,
     )
     expected_list_of_goods.sort(
-        key=lambda good: (good.item_id, good.stock, good.reserved_state),
+        key=lambda good: good.item_id,
     )
 
     assert response.status_code == 200
