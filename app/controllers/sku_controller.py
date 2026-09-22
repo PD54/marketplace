@@ -10,6 +10,7 @@ from app.dependencies.services.good import (
 )
 from app.dependencies.services.sku import (
     get_create_sku_service,
+    get_get_sku_info_service,
     get_set_sku_price_service,
     get_toggle_is_hidden_service,
 )
@@ -30,8 +31,10 @@ from app.services.sku.dto.create_sku import (
     CreateSkuInputDTO,
     CreateSkuOutputDTO,
 )
+from app.services.sku.dto.get_sku_info import GetSkuInfoOutputDTO
 from app.services.sku.dto.set_sku_price import SetSkuPriceInputDTO
 from app.services.sku.dto.toggle_is_hidden import ToggleIsHiddenInputDTO
+from app.services.sku.get_sku_info_service import GetSkuInfoService
 from app.services.sku.set_sku_price_service import SetSkuPriceService
 from app.services.sku.toggle_is_hidden_service import ToggleIsHiddenService
 
@@ -62,6 +65,18 @@ async def get_item_info_by_sku_id(
     ),
 ) -> GetItemInfoBySkuIdOutputDTO:
     return await service.get_item_info_by_sku_id(sku_id)
+
+
+@router.get("/getSkuInfo")
+async def get_sku_info(
+    sku_id: UUID = Query(
+        ...,
+        alias="id",
+        description="Id of the SKU",
+    ),
+    service: GetSkuInfoService = Depends(get_get_sku_info_service),
+) -> GetSkuInfoOutputDTO:
+    return await service.get_sku_info(sku_id)
 
 
 @router.post("/createSku")
