@@ -24,5 +24,6 @@ class GoodORM(BaseORM):
     )
     discount_percentage: Mapped[Decimal] = mapped_column(
         Numeric(precision=5, scale=2),
+        default=Decimal("0.00"),
         server_default="0.00",
     )

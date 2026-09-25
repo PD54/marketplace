@@ -2,9 +2,11 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.repositories.acceptance import AcceptanceRepository
+from app.database.repositories.discount import DiscountRepository
 from app.database.repositories.good import GoodRepository
 from app.database.repositories.posting_good import PostingGoodRepository
 from app.database.repositories.sku import SkuRepository
+from app.database.repositories.sku_and_discount import SkuAndDiscountRepository
 from app.database.repositories.task import TaskRepository
 from app.dependencies.session_generator import get_db
 
@@ -37,3 +39,15 @@ def get_posting_good_repository(
     database: AsyncSession = Depends(get_db),
 ) -> PostingGoodRepository:
     return PostingGoodRepository(database=database)
+
+
+def get_discount_repository(
+    database: AsyncSession = Depends(get_db),
+) -> DiscountRepository:
+    return DiscountRepository(database=database)
+
+
+def get_sku_and_discount_repository(
+    database: AsyncSession = Depends(get_db),
+) -> SkuAndDiscountRepository:
+    return SkuAndDiscountRepository(database=database)

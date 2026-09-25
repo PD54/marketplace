@@ -1,8 +1,10 @@
 # ruff: file-ignore[F401]
 from app.database.orm_models.acceptance import AcceptanceORM
 from app.database.orm_models.base import BaseORM
+from app.database.orm_models.discount import DiscountORM
 from app.database.orm_models.good import GoodORM
 from app.database.orm_models.posting import PostingORM
 from app.database.orm_models.posting_good import PostingGoodORM
 from app.database.orm_models.sku import SkuORM
+from app.database.orm_models.sku_and_discount import SkuAndDiscountORM
 from app.database.orm_models.task import TaskORM

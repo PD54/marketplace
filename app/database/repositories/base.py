@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
+from sqlalchemy import select
 from sqlalchemy import update as sa_update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,6 +26,15 @@ class BaseRepository[
         if not result:
             return None
         return self.dto.model_validate(result)
+
+    async def get_all_by_ids(self, list_of_ids: list[UUID]) -> list[DTO]:
+        if not list_of_ids:
+            return []
+
+        result = await self.database.scalars(
+            select(self.orm_model).where(self.orm_model.id.in_(list_of_ids))
+        )
+        return [self.dto.model_validate(obj) for obj in result]
 
     async def create(self, data: DTO) -> DTO:
         result = await self.database.scalars(
