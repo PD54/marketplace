@@ -10,6 +10,7 @@ from app.dependencies.repositories import (
 )
 from app.services.discount.cancel_discount_service import CancelDiscountService
 from app.services.discount.create_discount_service import CreateDiscountService
+from app.services.discount.get_discount_service import GetDiscountService
 
 
 def get_create_discount_service(
@@ -31,4 +32,16 @@ def get_cancel_discount_service(
 ) -> CancelDiscountService:
     return CancelDiscountService(
         discount_repo=discount_repo,
+    )
+
+
+def get_get_discount_service(
+    discount_repo: DiscountRepository = Depends(get_discount_repository),
+    sku_and_discount_repo: SkuAndDiscountRepository = Depends(
+        get_sku_and_discount_repository,
+    ),
+) -> GetDiscountService:
+    return GetDiscountService(
+        discount_repo=discount_repo,
+        sku_and_discount_repo=sku_and_discount_repo,
     )
