@@ -2,7 +2,12 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from app.database.dto.good import GoodDTO, GoodStock, UpdateGoodDTO
+from app.database.dto.good import (
+    GoodDTO,
+    GoodReservedState,
+    GoodStock,
+    UpdateGoodDTO,
+)
 from app.database.orm_models.good import GoodORM
 from app.database.repositories.base import BaseRepository
 
@@ -21,7 +26,7 @@ class GoodRepository(BaseRepository[GoodDTO, GoodORM, UpdateGoodDTO]):
             .where(
                 self.orm_model.sku_id == sku_id,
                 self.orm_model.stock == stock,
-                self.orm_model.reserved_state.is_(False),
+                self.orm_model.reserved_state == GoodReservedState.unreserved,
             )
             .limit(1)
             .with_for_update()

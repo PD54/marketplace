@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from app.database.dto.good import GoodDTO, GoodStock
+from app.database.dto.good import GoodDTO, GoodReservedState, GoodStock
 from app.database.dto.sku import SkuDTO
 
 
@@ -15,7 +15,7 @@ def good(sku: SkuDTO) -> GoodDTO:
 def good_reserved(sku: SkuDTO) -> GoodDTO:
     return GoodDTO(
         sku_id=sku.id,
-        reserved_state=True,
+        reserved_state=GoodReservedState.reserved,
     )
 
 

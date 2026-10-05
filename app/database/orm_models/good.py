@@ -18,9 +18,9 @@ class GoodORM(BaseORM):
         default="valid",
         server_default="valid",
     )
-    reserved_state: Mapped[bool] = mapped_column(
-        default=False,
-        server_default="f",
+    reserved_state: Mapped[str] = mapped_column(
+        default="unreserved",
+        server_default="unreserved",
     )
     discount_percentage: Mapped[Decimal] = mapped_column(
         Numeric(precision=5, scale=2),

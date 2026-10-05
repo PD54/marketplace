@@ -1,4 +1,5 @@
 from enum import StrEnum
+from typing import Literal
 from uuid import UUID
 
 from pydantic import Field
@@ -11,6 +12,9 @@ class TaskStatus(StrEnum):
     completed = "completed"
     in_work = "in_work"
     cancelled = "cancelled"
+
+
+TaskStatusWithoutInWork = Literal[TaskStatus.completed, TaskStatus.cancelled]
 
 
 class TaskType(StrEnum):

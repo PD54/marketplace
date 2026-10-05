@@ -1,6 +1,6 @@
 import pytest
 
-from app.database.dto.good import GoodDTO
+from app.database.dto.good import GoodDTO, GoodReservedState
 from app.database.dto.posting_good import PostingGoodDTO
 from app.database.repositories.good import GoodRepository
 from app.database.repositories.posting_good import PostingGoodRepository
@@ -45,7 +45,7 @@ async def test_happy_path(
     assert new_good.id == good_in_db.id
     assert new_good.sku_id == posting_good_in_db.good_sku_id
     assert new_good.stock == posting_good_in_db.good_stock
-    assert new_good.reserved_state is True
+    assert new_good.reserved_state == GoodReservedState.reserved
 
     assert len(posting_goods_with_new_good) == 1
     assert new_posting_good.good_id == good_in_db.id
