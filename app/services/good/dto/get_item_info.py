@@ -1,8 +1,8 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.database.dto.good import GoodStock
+from app.database.dto.good import GoodReservedState, GoodStock
 
 
 class GetItemInfoOutputDTO(BaseModel):
@@ -18,5 +18,15 @@ class GetItemInfoOutputDTO(BaseModel):
     reserved_state: bool = Field(
         description="Flag that tells if the good is reserved",
     )
+
+    @field_validator("reserved_state", mode="before")
+    @classmethod
+    def convert_reserved_state_to_bool(
+        cls,
+        value: GoodReservedState | bool,
+    ) -> bool:
+        if isinstance(value, GoodReservedState):
+            return value != GoodReservedState.unreserved
+        return value
 
     model_config = ConfigDict(from_attributes=True)

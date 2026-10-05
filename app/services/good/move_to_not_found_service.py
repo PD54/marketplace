@@ -1,6 +1,11 @@
 import logging
 
-from app.database.dto.good import GoodDTO, GoodStock, UpdateGoodDTO
+from app.database.dto.good import (
+    GoodDTO,
+    GoodReservedState,
+    GoodStock,
+    UpdateGoodDTO,
+)
 from app.database.dto.posting_good import (
     PostingGoodCancelReason,
     PostingGoodDTO,
@@ -55,7 +60,7 @@ class MoveToNotFoundService:
             entity_id=input_dto.id,
             update_dto=UpdateGoodDTO(
                 stock=GoodStock.not_found,
-                reserved_state=False,
+                reserved_state=GoodReservedState.unreserved,
             ),
         )
         logger.info(

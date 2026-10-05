@@ -1,6 +1,11 @@
 import logging
 
-from app.database.dto.good import GoodDTO, GoodStock, UpdateGoodDTO
+from app.database.dto.good import (
+    GoodDTO,
+    GoodReservedState,
+    GoodStock,
+    UpdateGoodDTO,
+)
 from app.database.dto.posting_good import (
     PostingGoodCancelReason,
     PostingGoodDTO,
@@ -62,7 +67,7 @@ class MarkdownItemService:
             update_dto=UpdateGoodDTO(
                 stock=GoodStock.defect,
                 discount_percentage=input_dto.percentage,
-                reserved_state=False,
+                reserved_state=GoodReservedState.unreserved,
             ),
         )
         logger.info(

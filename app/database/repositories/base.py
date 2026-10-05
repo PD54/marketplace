@@ -68,3 +68,20 @@ class BaseRepository[
             .where(self.orm_model.id == entity_id)
             .values(update_fields)
         )
+
+    async def bulk_update(
+        self,
+        entity_ids_list: list[UUID],
+        update_dto: UpdateDTO,
+    ) -> None:
+        if not entity_ids_list:
+            return
+
+        update_fields = update_dto.model_dump(exclude_unset=True)
+        update_fields["updated_at"] = datetime.now(UTC)
+
+        await self.database.execute(
+            sa_update(self.orm_model)
+            .where(self.orm_model.id.in_(entity_ids_list))
+            .values(update_fields)
+        )

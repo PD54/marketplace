@@ -8,6 +8,12 @@ from pydantic import Field
 from app.database.dto.base import BaseDTO, UpdateBaseDTO
 
 
+class GoodReservedState(StrEnum):
+    unreserved = "unreserved"
+    reserved = "reserved"
+    sold = "sold"
+
+
 class GoodStock(StrEnum):
     valid = "valid"
     defect = "defect"
@@ -25,9 +31,9 @@ class GoodDTO(BaseDTO):
         GoodStock.valid,
         description="Stock status of the good.",
     )
-    reserved_state: bool = Field(
-        False,
-        description="Flag that tells if the good is reserved",
+    reserved_state: GoodReservedState = Field(
+        GoodReservedState.unreserved,
+        description="Reservation status of the good",
     )
     discount_percentage: Decimal = Field(
         Decimal("0.00"),
@@ -44,9 +50,9 @@ class UpdateGoodDTO(UpdateBaseDTO):
         None,
         description="Stock status of the good.",
     )
-    reserved_state: bool | None = Field(
+    reserved_state: GoodReservedState | None = Field(
         None,
-        description="Flag that tells if the good is reserved",
+        description="Reservation status of the good",
     )
     discount_percentage: Decimal | None = Field(
         None,

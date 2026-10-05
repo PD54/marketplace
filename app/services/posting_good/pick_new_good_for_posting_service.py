@@ -1,6 +1,6 @@
 import logging
 
-from app.database.dto.good import UpdateGoodDTO
+from app.database.dto.good import GoodReservedState, UpdateGoodDTO
 from app.database.dto.posting_good import PostingGoodDTO
 from app.database.dto.task import TaskDTO, TaskType
 from app.database.repositories.good import GoodRepository
@@ -69,7 +69,9 @@ class PickNewGoodForPostingService:
 
         await self.good_repo.update(
             entity_id=replacement_good.id,
-            update_dto=UpdateGoodDTO(reserved_state=True),
+            update_dto=UpdateGoodDTO(
+                reserved_state=GoodReservedState.reserved,
+            ),
         )
         logger.info(
             f"Товар для замены с id {replacement_good.id} зарезервирован"

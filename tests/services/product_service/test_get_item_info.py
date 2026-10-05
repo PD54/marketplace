@@ -39,7 +39,7 @@ async def test_correct_response(
     assert result.id == good.id
     assert result.sku_id == good.sku_id
     assert result.stock == good.stock
-    assert result.reserved_state == good.reserved_state
+    assert result.reserved_state is False
 
 
 async def test_good_not_found(

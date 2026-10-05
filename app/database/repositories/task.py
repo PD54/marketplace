@@ -22,6 +22,17 @@ class TaskRepository(BaseRepository[TaskDTO, TaskORM, UpdateTaskDTO]):
         )
         return [self.dto.model_validate(task) for task in result]
 
+    async def get_by_posting_id(
+        self,
+        posting_id: UUID,
+    ) -> list[TaskDTO]:
+        result = await self.database.scalars(
+            select(self.orm_model).where(
+                self.orm_model.posting_id == posting_id
+            )
+        )
+        return [self.dto.model_validate(task) for task in result]
+
     async def get_by_good_id(self, good_id: UUID) -> list[TaskDTO]:
         result = await self.database.scalars(
             select(self.orm_model).where(self.orm_model.good_id == good_id)

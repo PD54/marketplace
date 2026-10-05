@@ -2,7 +2,7 @@ from uuid import uuid7
 
 from httpx import AsyncClient
 
-from app.database.dto.good import GoodDTO, GoodStock
+from app.database.dto.good import GoodDTO, GoodReservedState, GoodStock
 from app.database.dto.posting_good import (
     PostingGoodCancelReason,
     PostingGoodDTO,
@@ -48,7 +48,7 @@ async def test_happy_path(
 
     assert response.status_code == 200
 
-    assert updated_good.reserved_state is False
+    assert updated_good.reserved_state == GoodReservedState.unreserved
     assert updated_good.stock == GoodStock.not_found
 
     assert (
@@ -92,7 +92,7 @@ async def test_success_without_new_good(
 
     assert response.status_code == 200
 
-    assert updated_good.reserved_state is False
+    assert updated_good.reserved_state == GoodReservedState.unreserved
     assert updated_good.stock == GoodStock.not_found
 
     assert (
